@@ -94,7 +94,7 @@ int main(int argc, char const *argv[])
 	SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr){
 		logSDLError(std::cout, "SDL_CreateRenderer");
-		// cleanup(win, renderer);
+		cleanup(win, renderer);
 		SDL_Quit();
 		return 1;
 	}
@@ -105,7 +105,7 @@ int main(int argc, char const *argv[])
 	if (tile_tex == nullptr)
 	{
 		logSDLError(std::cout, "loadTexture");
-		// cleanup(win, renderer, tile_tex);
+		cleanup(win, renderer, tile_tex);
 		return 1;
 	}
 
@@ -114,7 +114,7 @@ int main(int argc, char const *argv[])
 	if (snake_tex == nullptr)
 	{
 		logSDLError(std::cout, "loadTexture");
-		// cleanup(win, renderer, tile_tex, snake_tex);
+		cleanup(win, renderer, tile_tex, snake_tex);
 		return 1;
 	}
 
@@ -122,7 +122,7 @@ int main(int argc, char const *argv[])
 	if (egg_tex == nullptr)
 	{
 		logSDLError(std::cout, "loadTexture");
-		// cleanup(win, renderer, tile_tex, snake_tex);
+		cleanup(win, renderer, tile_tex, snake_tex);
 		return 1;
 	}
 
