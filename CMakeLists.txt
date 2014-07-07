@@ -29,6 +29,6 @@ find_package(SDL2_image REQUIRED)
 
 include_directories(include)
 
-add_executable(snake src/main.cpp src/SnakeController.cpp src/egg.cpp)
+add_executable(snake src/main.cpp src/SnakeController.cpp src/EggController.cpp)
 target_link_libraries(snake ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})
 install(TARGETS snake RUNTIME DESTINATION ${BIN_DIR})
