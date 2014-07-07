@@ -1,12 +1,12 @@
-#ifndef EGG_H
-#define EGG_H
+#ifndef EGGCONTROLLER_H
+#define EGGCONTROLLER_H
 
 #include <SDL.h>
 
-class Egg
+class EggController
 {
 public:
-	Egg();
+	EggController();
 
 	int pos_x;
 	int pos_y;

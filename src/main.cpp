@@ -6,8 +6,8 @@
 #include "logging.h"
 #include "res_path.h"
 #include "settings.h"
-#include "snake.h"
-#include "egg.h"
+#include "SnakeController.h"
+#include "EggController.h"
 
 const int WIN_POS_X = 100;
 const int WIN_POS_Y = 100;
@@ -125,9 +125,8 @@ int main(int argc, char const *argv[])
 		cleanup(win, renderer, tile_tex, snake_tex);
 		return 1;
 	}
-
-	Snake snake;
-	Egg egg;
+	SnakeController snake;
+	EggController egg;
 
 	unsigned int lastTime = 0, currentTime;
 	SDL_Event e;
@@ -165,13 +164,14 @@ int main(int argc, char const *argv[])
 		
 
 		currentTime = SDL_GetTicks();
-		 if (currentTime > lastTime + 400) {
+		 if (currentTime > lastTime + 600) {
 
 		 	quit = snake.moveSnake(currentDirection);
+		 	
 		 	if (snake.foundEgg(egg.pos_x, egg.pos_y))
 		 	{
-		 		egg.placeEgg();
 		 		snake.addSnakePart();
+		 		egg.placeEgg();
 		 		score++;
 		 	}
 
