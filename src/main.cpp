@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL2_image/SDL_image.h>
+#include <SDL_ttf.h>
 #include "cleanup.h"
 #include "logging.h"
 #include "res_path.h"
@@ -74,11 +75,63 @@ void renderBackground(SDL_Texture *tex, SDL_Renderer *ren){
 }
 
 
+TTF_Font* loadFont(const std::string &fontFile, int fontSize){
+	//Open the font
+	TTF_Font *font = TTF_OpenFont(fontFile.c_str(), fontSize);
+	if (font == nullptr){
+		logSDLError(std::cout, "TTF_OpenFont");
+		return nullptr;
+	}
+	return font;
+}
+
+/**
+* Render the message we want to display to a texture for drawing
+* @param message The message we want to display
+* @param fontFile The font we want to use to render the text
+* @param color The color we want the text to be
+* @param fontSize The size we want the font to be
+* @param renderer The renderer to load the texture in
+* @return An SDL_Texture containing the rendered message, or nullptr if something went wrong
+*/
+SDL_Texture* renderText(const std::string &message, TTF_Font* font,
+	SDL_Color color, SDL_Renderer *renderer)
+{	
+	//We need to first render to a surface as that's what TTF_RenderText
+	//returns, then load that surface into a texture
+	SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+	if (surf == nullptr){
+		TTF_CloseFont(font);
+		logSDLError(std::cout, "TTF_RenderText");
+		return nullptr;
+	}
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surf);
+	if (texture == nullptr){
+		logSDLError(std::cout, "CreateTexture");
+	}
+	//Clean up the surface and font
+	SDL_FreeSurface(surf);
+	return texture;
+}
+
+void displayScore(int score, TTF_Font* font,
+	SDL_Color color, SDL_Renderer *renderer){
+	const std::string message = "Score: "+std::to_string(score);
+	SDL_Texture *texture = renderText(message, font, color, renderer);
+	renderTexture(texture, renderer, 0, 0);
+}
+
+
 
 int main(int argc, char const *argv[])
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
 		logSDLError(std::cout, "SDL_Init");
+		return 1;
+	}
+
+	if (TTF_Init() != 0){
+		logSDLError(std::cout, "TTF_Init");
 		return 1;
 	}
 
@@ -125,6 +178,10 @@ int main(int argc, char const *argv[])
 		cleanup(win, renderer, tile_tex, snake_tex);
 		return 1;
 	}
+
+	TTF_Font *font = loadFont(resPath + "sample.ttf", 12);
+	SDL_Color color = { 255, 255, 255, 255 };
+
 	SnakeController snake;
 	EggController egg;
 
@@ -177,6 +234,7 @@ int main(int argc, char const *argv[])
 
     		SDL_RenderClear(renderer);
 			renderBackground(tile_tex, renderer);
+			displayScore(score, font, color, renderer);
 			snake.renderSnake(snake_tex, renderer, &renderTexture);
 			egg.renderEgg(egg_tex, renderer, &renderTexture);
 			SDL_RenderPresent(renderer);
@@ -185,6 +243,8 @@ int main(int argc, char const *argv[])
 	}
 
 	cleanup(win, renderer, tile_tex, snake_tex, egg_tex);
+	TTF_CloseFont(font);
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 

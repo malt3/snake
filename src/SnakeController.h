@@ -1,5 +1,5 @@
-#ifndef SNAKE_H
-#define SNAKE_H 
+#ifndef SNAKECONTROLLER_H
+#define SNAKECONTROLLER_H 
 
 #include <SDL.h>
 #include <deque>
@@ -29,8 +29,6 @@ public:
 
 
 private:
-
-	// TODO: Use std::vector.
 	std::deque <snake_part> snake_deque;
 	snake_part getSnakeHead();
 };
