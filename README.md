@@ -3,6 +3,8 @@
 
 Tested under Mac OS X 10.9
 
+![screenshot](https://api.monosnap.com/image/download?id=SAThvFa45Zhci8kynIOr66SPQ9AtIc)
+
 ## Requirements:
 * cmake 2.6+
 * SDL2 library
